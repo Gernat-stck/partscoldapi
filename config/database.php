@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Str;
+
 $DATABASE_URL = parse_url(getenv("DATABASE_URL"));
 
 return [
@@ -16,7 +17,7 @@ return [
     |
     */
 
-    'default' => env('DB_CONNECTION', 'pgsql'),
+    'default' => env('DB_CONNECTION', 'mysql'),
 
 
 
@@ -48,11 +49,11 @@ return [
 
         'mysql' => [
             'driver' => 'mysql',
-            'host' => env('STACKHERO_MARIADB_HOST'),
-            'port' => 3306,
-            'username' => env('STACKHERO_MARIADB_USER'),
-            'password' => env('STACKHERO_MARIADB_PASSWORD'),
-            'database' => env('STACKHERO_MARIADB_USER'),
+            'host' => env('DB_HOST', '127.0.0.1'),
+            'port' => env('DB_PORT', '3306'),
+            'database' => env('DB_DATABASE', 'partscoldapi'),
+            'username' => env('DB_USERNAME', 'root'),
+            'password' => env('DB_PASSWORD', ''),
             'charset' => 'utf8mb4',
             'collation' => 'utf8mb4_unicode_ci',
             'prefix' => '',
