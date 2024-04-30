@@ -3,8 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\User;
-use Illuminate\Support\Facades\Auth;
+use App\Models\Users;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 
@@ -22,7 +21,7 @@ class AuthController extends Controller
                 'status' => false,
                 'errors' => $validator->errors()->all()], 400);
         }
-        $user = User::where('user_name', $request->user_name)->first();
+        $user = Users::where('user_name', $request->user_name)->first();
         if (!$user || !Hash::check($request->password, $user->password)) {
             return response()->json([
                 'status' => false,
