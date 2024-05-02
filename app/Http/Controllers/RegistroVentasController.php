@@ -30,23 +30,27 @@ class RegistroVentasController extends Controller
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'nombre_cliente' => REQUIRED_STRG,
-            'direccion' => REQUIRED_STRG,
-            'numero_telefono' => REQUIRED_STRG,
-            'email' => 'required|string|email',
-            'documento' => REQUIRED_STRG,
-            'total' => REQUIRED_NUMERIC,
-            'iva' => REQUIRED_NUMERIC,
-            'subtotal' => REQUIRED_NUMERIC,
+            '*.nombre_cliente' => REQUIRED_STRG,
+            '*.direccion' => REQUIRED_STRG,
+            '*.numero_telefono' => REQUIRED_STRG,
+            '*.email' => 'required|string|email',
+            '*.documento' => REQUIRED_STRG,
+            '*.total' => REQUIRED_NUMERIC,
+            '*.iva' => REQUIRED_NUMERIC,
+            '*.subtotal' => REQUIRED_NUMERIC,
         ]);
 
         if ($validator->fails()) {
             return response()->json(['error' => $validator->errors()], 400);
         }
 
-        $venta = RegistroVentas::create($request->all());
+        $createdRegistro = [];
 
-        return response()->json($venta, 201);
+        foreach ($request->all() as $value) {
+            $venta = RegistroVentas::create($value);
+            $createdRegistro[] = $venta;
+        }
+        return response()->json($createdRegistro, 201);
     }
 
     /**
@@ -70,22 +74,24 @@ class RegistroVentasController extends Controller
     public function update(Request $request, RegistroVentas $venta)
     {
         $validator = Validator::make($request->all(), [
-            'nombre_cliente' => REQUIRED_STRG,
-            'direccion' => REQUIRED_STRG,
-            'numero_telefono' => REQUIRED_STRG,
-            'email' => 'required|string|email',
-            'documento' => REQUIRED_STRG,
-            'total' => REQUIRED_NUMERIC,
-            'iva' => REQUIRED_NUMERIC,
-            'subtotal' => REQUIRED_NUMERIC,
+            '*.nombre_cliente' => REQUIRED_STRG,
+            '*.direccion' => REQUIRED_STRG,
+            '*.numero_telefono' => REQUIRED_STRG,
+            '*.email' => 'required|string|email',
+            '*.documento' => REQUIRED_STRG,
+            '*.total' => REQUIRED_NUMERIC,
+            '*.iva' => REQUIRED_NUMERIC,
+            '*.subtotal' => REQUIRED_NUMERIC,
         ]);
 
         if ($validator->fails()) {
             return response()->json(['error' => $validator->errors()], 400);
         }
 
-        $venta->update($request->all());
-
+        foreach ($request->all() as $value) {
+            $venta = RegistroVentas::findOrFail($value['id']);
+            $venta->update($venta);
+        }
         return response()->json($venta, 200);
     }
 

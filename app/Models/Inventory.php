@@ -13,12 +13,14 @@ class Inventory extends Model
      *
      * @var array<int, string>
      */
+    protected $table = 'inventory';
+
     protected $fillable = [
         'product_name',
         'codigo_producto',
         'descripcion',
         'cantidad_stock',
         'img_product',
-        'precio_prodcuto',
+        'precio_producto',
     ] ;
 }

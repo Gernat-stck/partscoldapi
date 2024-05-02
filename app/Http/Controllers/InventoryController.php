@@ -30,21 +30,26 @@ class InventoryController extends Controller
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'product_name' => REQUIRED_STRG,
-            'codigo_producto' => REQUIRED_STRG,
-            'descripcion' => REQUIRED_STRG,
-            'cantidad_stock' => 'required|integer',
-            'img_product' => 'nullable|string',
-            'precio_prodcuto' => 'required|numeric',
+            '*.product_name' => REQUIRED_STRG,
+            '*.codigo_producto' => REQUIRED_STRG,
+            '*.descripcion' => REQUIRED_STRG,
+            '*.cantidad_stock' => 'required|integer',
+            '*.img_product' => 'nullable|string',
+            '*.precio_producto' => 'required|numeric',
         ]);
 
         if ($validator->fails()) {
             return response()->json(['error' => $validator->errors()], 400);
         }
 
-        $inventory = Inventory::create($request->all());
+        $createdInventories = [];
 
-        return response()->json($inventory, 201);
+        foreach ($request->all() as $inventoryData) {
+            $inventory = Inventory::create($inventoryData);
+            $createdInventories[] = $inventory;
+        }
+
+        return response()->json($createdInventories, 201);
     }
 
     /**
@@ -65,25 +70,29 @@ class InventoryController extends Controller
      * @param  \App\Models\Inventory  $inventory
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Inventory $inventory)
+    public function update(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'product_name' => REQUIRED_STRG,
-            'codigo_producto' => REQUIRED_STRG,
-            'descripcion' => REQUIRED_STRG,
-            'cantidad_stock' => 'required|integer',
-            'img_product' => 'nullable|string',
-            'precio_prodcuto' => 'required|numeric',
+            '*.product_name' => REQUIRED_STRG,
+            '*.codigo_producto' => REQUIRED_STRG,
+            '*.descripcion' => REQUIRED_STRG,
+            '*.cantidad_stock' => 'required|integer',
+            '*.img_product' => 'nullable|string',
+            '*.precio_producto' => 'required|numeric',
         ]);
 
         if ($validator->fails()) {
             return response()->json(['error' => $validator->errors()], 400);
         }
 
-        $inventory->update($request->all());
+        foreach ($request->all() as $inventoryData) {
+            $inventory = Inventory::findOrFail($inventoryData['id']);
+            $inventory->update($inventoryData);
+        }
 
-        return response()->json($inventory, 200);
+        return response()->json(['message' => 'Inventories updated successfully'], 200);
     }
+
 
     /**
      * Remove the specified resource from storage.
