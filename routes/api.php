@@ -1,9 +1,9 @@
 <?php
 
 
-
-use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
+use Illuminate\Support\Facades\Route;
+
 use App\Http\Controllers\InventoryController;
 use App\Http\Controllers\RegistroVentasController;
 use App\Http\Controllers\UsersController;
