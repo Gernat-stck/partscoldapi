@@ -2,12 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Users;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 
-class UsersController extends Controller
+class UserController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -16,8 +16,8 @@ class UsersController extends Controller
      */
     public function index()
     {
-        $users = Users::all();
-        return response()->json($users);
+        $user = user::all();
+        return response()->json($user);
     }
 
     /**
@@ -30,7 +30,7 @@ class UsersController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'name' => 'required|string',
-            'user_name' => 'required|string|unique:users,user_name',
+            'user_name' => 'required|string|unique:user,user_name',
             'password' => 'required|string|min:8',
         ]);
 
@@ -38,7 +38,7 @@ class UsersController extends Controller
             return response()->json(['error' => $validator->errors()], 400);
         }
 
-        $user = new Users([
+        $user = new User([
             'name' => $request->name,
             'user_name' => $request->user_name,
             'password' => Hash::make($request->password),
@@ -52,10 +52,10 @@ class UsersController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\Users  $user
+     * @param  \App\Models\user  $user
      * @return \Illuminate\Http\Response
      */
-    public function show(Users $user)
+    public function show(User $user)
     {
         return response()->json($user);
     }
@@ -64,14 +64,14 @@ class UsersController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Users  $user
+     * @param  \App\Models\User  $user
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Users $user)
+    public function update(Request $request, User $user)
     {
         $validator = Validator::make($request->all(), [
             'name' => 'required|string',
-            'user_name' => 'required|string|unique:users,user_name,' . $user->id,
+            'user_name' => 'required|string|unique:user,user_name,' . $user->id,
             'password' => 'required|string|min:8',
         ]);
 
@@ -90,10 +90,10 @@ class UsersController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\Users  $user
+     * @param  \App\Models\User  $user
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Users $user)
+    public function destroy(User $user)
     {
         $user->delete();
 

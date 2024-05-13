@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Spatie\Permission\Models\Role;
-use App\Models\Users;
+use App\Models\User;
 class RoleController extends Controller
 {
     public function create(Request $request)
@@ -31,7 +31,7 @@ class RoleController extends Controller
         ]);
 
         // Obtener el usuario y el rol
-        $user = Users::findOrFail($request->user_id);
+        $user = User::findOrFail($request->user_id);
         $role = Role::findByName($request->role_name);
 
         // Asignar el rol al usuario

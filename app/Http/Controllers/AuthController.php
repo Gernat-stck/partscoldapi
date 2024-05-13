@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\Users;
+use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
@@ -23,7 +23,7 @@ class AuthController extends Controller
                 'errors' => $validator->errors()->all()
             ], 400);
         }
-        $user = Users::where('user_name', $request->user_name)->first();
+        $user = User::where('user_name', $request->user_name)->first();
         if (!$user || !Hash::check($request->password, $user->password)) {
             return response()->json([
                 'status' => false,
@@ -32,7 +32,7 @@ class AuthController extends Controller
         }
         return response()->json([
             'status' => true,
-            'user' => $user,
+            'user_name' => $user,
             'token' => $user->createToken('token')->plainTextToken
         ], 200);
     }

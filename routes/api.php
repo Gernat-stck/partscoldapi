@@ -6,7 +6,7 @@ use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\InventoryController;
 use App\Http\Controllers\RegistroVentasController;
-use App\Http\Controllers\UsersController;
+use App\Http\Controllers\UserController;
 
 // Ruta para iniciar sesión
 Route::post('/login', [AuthController::class, 'login']);
@@ -16,11 +16,11 @@ Route::post('/logout', [AuthController::class, 'logout']);
 // Rutas protegidas
 Route::middleware('auth:sanctum')->group(function () {
 
-    Route::get('/users', [UsersController::class, 'index']);
-    Route::put('/users/{id}', [UsersController::class, 'update']);
-    Route::post('/users', [UsersController::class, 'store']);
-    Route::get('/users/search/{field}/{query}', [UsersController::class, 'search']);
-    Route::delete('/users/{id}', [UsersController::class, 'destroy']);
+    Route::get('/users', [UserController::class, 'index']);
+    Route::put('/users/{id}', [UserController::class, 'update']);
+    Route::post('/users', [UserController::class, 'store']);
+    Route::get('/users/search/{field}/{query}', [UserController::class, 'search']);
+    Route::delete('/users/{id}', [UserController::class, 'destroy']);
 
     Route::get('/inventario/view', [InventoryController::class, 'index']);
     Route::put('/inventario/update', [InventoryController::class, 'update']);
