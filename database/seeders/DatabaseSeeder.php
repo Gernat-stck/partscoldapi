@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
+use App\Models\User;
 
 class DatabaseSeeder extends Seeder
 {
@@ -11,9 +12,14 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        $this->call([
-         //   ClientesTableSeeder::class,
-            UserTableSeeder::class,
+        // Crear el rol de administrador
+
+        // Crear el usuario administrador
+        User::create([
+            'name' => 'Admin User',
+            'user_name' => 'admin',
+            'password' => bcrypt('contra152'), // Cambia 'password' por la contraseña que quieras
+            'role' => 'admin'
         ]);
     }
 }
