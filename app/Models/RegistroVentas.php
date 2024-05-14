@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class RegistroVentas extends Model
 {
     use HasFactory;
+
     protected $fillable = [
         'nombre_cliente',
         'direccion',

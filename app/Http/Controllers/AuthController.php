@@ -3,43 +3,35 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\User;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Validator;
+use App\Models\User;
 
 class AuthController extends Controller
 {
     public function login(Request $request)
     {
-        $rules = [
-            'user_name' => 'required|string',
-            'password' => 'required|string'
-        ];
-        $validator = Validator::make($request->input(), $rules);
-        if ($validator->fails()) {
-            return response()->json([
-                'status' => false,
-                'errors' => $validator->errors()->all()
-            ], 400);
+        $credentials = $request->validate([
+            'user_name' => 'required',
+            'password' => 'required',
+        ]);
+
+        if (Auth::attempt($credentials)) {
+            $user = User::where('user_name', $request->user_name)->first();
+            $token = $user->createToken('token-name')->plainTextToken;
+            return response()->json(['token' => $token], 200);
+        } else {
+            return response()->json(['message' => 'Invalid credentials'], 401);
         }
-        $user = User::where('user_name', $request->user_name)->first();
-        if (!$user || !Hash::check($request->password, $user->password)) {
-            return response()->json([
-                'status' => false,
-                'message' => 'Invalid login details'
-            ], 401);
-        }
-        return response()->json([
-            'status' => true,
-            'user_name' => $user,
-            'token' => $user->createToken('token')->plainTextToken
-        ], 200);
     }
 
     public function logout(Request $request)
     {
-        $request->user()->tokens()->delete();
-        return response()->json(['message' => 'Logged out'], 200);
+        $user = $request->user();
+        if ($user) {
+            $user->currentAccessToken()->delete();
+            return response()->json(['message' => 'Logged out successfully'], 200);
+        } else {
+            return response()->json(['message' => 'User not authenticated'], 401);
+        }
     }
 }

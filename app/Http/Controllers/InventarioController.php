@@ -2,13 +2,13 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Inventory;
+use App\Models\Inventario;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
 const REQUIRED_STRG = 'required|string';
 
-class InventoryController extends Controller
+class InventarioController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -17,8 +17,8 @@ class InventoryController extends Controller
      */
     public function index()
     {
-        $inventory = Inventory::all();
-        return response()->json($inventory);
+        $inventario = Inventario::all();
+        return response()->json($inventario);
     }
 
     /**
@@ -44,9 +44,9 @@ class InventoryController extends Controller
 
         $createdInventories = [];
 
-        foreach ($request->all() as $inventoryData) {
-            $inventory = Inventory::create($inventoryData);
-            $createdInventories[] = $inventory;
+        foreach ($request->all() as $InventarioData) {
+            $inventario = Inventario::create($InventarioData);
+            $createdInventories[] = $inventario;
         }
 
         return response()->json($createdInventories, 201);
@@ -55,19 +55,19 @@ class InventoryController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\Inventory  $inventory
+     * @param  \App\Models\Inventario  $Inventario
      * @return \Illuminate\Http\Response
      */
-    public function show(Inventory $inventory)
+    public function show(Inventario $inventario)
     {
-        return response()->json($inventory);
+        return response()->json($inventario);
     }
 
     /**
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Inventory  $inventory
+     * @param  \App\Models\Inventario  $Inventario
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request)
@@ -85,9 +85,9 @@ class InventoryController extends Controller
             return response()->json(['error' => $validator->errors()], 400);
         }
 
-        foreach ($request->all() as $inventoryData) {
-            $inventory = Inventory::findOrFail($inventoryData['id']);
-            $inventory->update($inventoryData);
+        foreach ($request->all() as $InventarioData) {
+            $inventario = Inventario::findOrFail($InventarioData['id']);
+            $inventario->update($InventarioData);
         }
 
         return response()->json(['message' => 'Inventories updated successfully'], 200);
@@ -97,12 +97,12 @@ class InventoryController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\Inventory  $inventory
+     * @param  \App\Models\Inventario  $Inventario
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Inventory $inventory)
+    public function destroy(Inventario $inventario)
     {
-        $inventory->delete();
+        $inventario->delete();
 
         return response()->json(null, 204);
     }
