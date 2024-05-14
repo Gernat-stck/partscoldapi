@@ -18,7 +18,7 @@ class InventarioController extends Controller
     public function index()
     {
         $inventario = Inventario::all();
-        return response()->json($inventario);
+        return response()->json([$inventario], 200);
     }
 
     /**
