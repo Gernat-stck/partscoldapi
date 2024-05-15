@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\UsersController;
-use App\Http\Controllers\InventarioController;
+use App\Http\Controllers\InventariosController;
 use App\Http\Controllers\RegistroVentasController;
 
 
@@ -20,11 +20,11 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/users/search/{field}/{query}', [UsersController::class, 'search']);
     Route::delete('/users/{id}', [UsersController::class, 'destroy']);
 
-    Route::get('/inventario', [InventarioController::class, 'index']);
-    Route::put('/inventario/{id}', [InventarioController::class, 'update']);
-    Route::post('/inventario/create', [InventarioController::class, 'store']);
-    Route::get('/inventario/search/{field}/{query}', [InventarioController::class, 'search']);
-    Route::delete('/inventario/{id}', [InventarioController::class, 'destroy']);
+    Route::get('/inventario', [InventariosController::class, 'index']);
+    Route::put('/inventario/{id}', [InventariosController::class, 'update']);
+    Route::post('/inventario/create', [InventariosController::class, 'store']);
+    Route::get('/inventario/search/{field}/{query}', [InventariosController::class, 'search']);
+    Route::delete('/inventario/{id}', [InventariosController::class, 'destroy']);
 
 
     Route::get('/invoices', [RegistroVentasController::class, 'index']);
