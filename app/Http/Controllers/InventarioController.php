@@ -18,7 +18,7 @@ class InventarioController extends Controller
     public function index()
     {
         $inventario = Inventario::all();
-        return response()->json([$inventario], 200);
+        return response()->json($inventario, 200);
     }
 
     /**
@@ -55,7 +55,7 @@ class InventarioController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\Inventario  $Inventario
+     * @param  \App\Models\Inventario  $inventario
      * @return \Illuminate\Http\Response
      */
     public function show(Inventario $inventario)
@@ -67,12 +67,13 @@ class InventarioController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Inventario  $Inventario
+     * @param  \App\Models\Inventario  $inventario
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request)
     {
         $validator = Validator::make($request->all(), [
+            '*.id' => 'required|exists:inventarios,id',
             '*.product_name' => REQUIRED_STRG,
             '*.codigo_producto' => REQUIRED_STRG,
             '*.descripcion' => REQUIRED_STRG,
@@ -93,17 +94,16 @@ class InventarioController extends Controller
         return response()->json(['message' => 'Inventories updated successfully'], 200);
     }
 
-
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\Inventario  $Inventario
+     * @param  \App\Models\Inventario  $inventario
      * @return \Illuminate\Http\Response
      */
     public function destroy(Inventario $inventario)
     {
         $inventario->delete();
-
         return response()->json(null, 204);
     }
 }
+

@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Validator;
 
 const REQUIRED_STRG = 'required|string';
 const REQUIRED_NUMERIC = 'required|numeric';
+
 class RegistroVentasController extends Controller
 {
     /**
@@ -50,6 +51,7 @@ class RegistroVentasController extends Controller
             $venta = RegistroVentas::create($value);
             $createdRegistro[] = $venta;
         }
+
         return response()->json($createdRegistro, 201);
     }
 
@@ -71,9 +73,10 @@ class RegistroVentasController extends Controller
      * @param  \App\Models\RegistroVentas  $venta
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, RegistroVentas $venta)
+    public function update(Request $request)
     {
         $validator = Validator::make($request->all(), [
+            '*.id' => 'required|exists:registro_ventas,id',
             '*.nombre_cliente' => REQUIRED_STRG,
             '*.direccion' => REQUIRED_STRG,
             '*.numero_telefono' => REQUIRED_STRG,
@@ -88,12 +91,17 @@ class RegistroVentasController extends Controller
             return response()->json(['error' => $validator->errors()], 400);
         }
 
+        $updatedVentas = [];
+
         foreach ($request->all() as $value) {
-            $venta = RegistroVentas::findOrFail($value['id']);
-            $venta->update($venta);
+            $currentVenta = RegistroVentas::findOrFail($value['id']);
+            $currentVenta->update($value);
+            $updatedVentas[] = $currentVenta;
         }
-        return response()->json($venta, 200);
+
+        return response()->json($updatedVentas, 200);
     }
+
 
     /**
      * Remove the specified resource from storage.
@@ -104,7 +112,6 @@ class RegistroVentasController extends Controller
     public function destroy(RegistroVentas $venta)
     {
         $venta->delete();
-
         return response()->json(null, 204);
     }
 }
