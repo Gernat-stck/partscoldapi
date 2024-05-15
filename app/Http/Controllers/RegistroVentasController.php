@@ -6,9 +6,6 @@ use App\Models\RegistroVentas;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
-const REQUIRED_STRG = 'required|string';
-const REQUIRED_NUMERIC = 'required|numeric';
-
 class RegistroVentasController extends Controller
 {
     /**

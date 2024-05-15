@@ -6,7 +6,6 @@ use App\Models\Inventario;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
-const REQUIRED_STRG = 'required|string';
 
 class InventarioController extends Controller
 {
