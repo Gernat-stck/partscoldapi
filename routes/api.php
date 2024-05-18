@@ -2,15 +2,15 @@
 
 use Illuminate\Support\Facades\Route;
 
-use App\Http\Controllers\AuthController;
+use App\Http\Controllers\LoginController;
 use App\Http\Controllers\UsersController;
 use App\Http\Controllers\InventariosController;
 use App\Http\Controllers\RegistroVentasController;
 
 
 // Ruta para iniciar sesión
-Route::post('/login', [AuthController::class, 'login']);
-Route::middleware('auth:sanctum')->post('/logout', [AuthController::class, 'logout']);
+Route::middleware('auth.session')->post('/login', [LoginController::class, 'authenticate']);
+Route::middleware('auth:sanctum')->post('/logout', [LoginController::class, 'logout']);
 
 //Rutas de la api
 Route::middleware('auth:sanctum')->group(function () {
