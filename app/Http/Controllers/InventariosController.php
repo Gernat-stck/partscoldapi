@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Inventario;
+use App\Models\Inventarios;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
@@ -16,7 +16,7 @@ class InventariosController extends Controller
      */
     public function index()
     {
-        $inventario = Inventario::all();
+        $inventario = Inventarios::all();
         return response()->json($inventario, 200);
     }
 
@@ -44,7 +44,7 @@ class InventariosController extends Controller
         $createdInventories = [];
 
         foreach ($request->all() as $InventarioData) {
-            $inventario = Inventario::create($InventarioData);
+            $inventario = Inventarios::create($InventarioData);
             $createdInventories[] = $inventario;
         }
 
@@ -54,10 +54,10 @@ class InventariosController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\Inventario  $inventario
+     * @param  \App\Models\Inventarios  $inventario
      * @return \Illuminate\Http\Response
      */
-    public function show(Inventario $inventario)
+    public function show(Inventarios $inventario)
     {
         return response()->json($inventario);
     }
@@ -66,7 +66,7 @@ class InventariosController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Inventario  $inventario
+     * @param  \App\Models\Inventarios  $inventario
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request)
@@ -86,7 +86,7 @@ class InventariosController extends Controller
         }
 
         foreach ($request->all() as $InventarioData) {
-            $inventario = Inventario::findOrFail($InventarioData['id']);
+            $inventario = Inventarios::findOrFail($InventarioData['id']);
             $inventario->update($InventarioData);
         }
 
@@ -96,10 +96,10 @@ class InventariosController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\Inventario  $inventario
+     * @param  \App\Models\Inventarios  $inventario
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Inventario $inventario)
+    public function destroy(Inventarios $inventario)
     {
         $inventario->delete();
         return response()->json(null, 204);
