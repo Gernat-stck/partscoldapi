@@ -34,6 +34,7 @@ class UsersController extends Controller
             '*.name' => 'required|string|max:255',
             '*.user_name' => 'required|string|max:255|unique:users,user_name',
             '*.password' => 'required|string|min:8',
+            '*.rol' => 'required|string',
         ]);
 
         // Verifica si la validación falla
@@ -63,6 +64,7 @@ class UsersController extends Controller
             'name' => 'sometimes|required|string|max:255',
             'user_name' => 'sometimes|required|string|max:255|unique:users,user_name,' . $user->id,
             'password' => 'sometimes|required|string|min:8',
+            'rol' => 'sometimes|required|string'
         ]);
 
         // Verifica si la validación falla
