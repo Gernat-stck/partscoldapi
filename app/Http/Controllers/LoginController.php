@@ -3,7 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Auth;
 use App\Models\User;
 
@@ -14,17 +15,31 @@ class LoginController extends Controller
      */
     public function authenticate(Request $request)
     {
-        $credentials = $request->validate([
-            'user_name' => ['required'],
-            'password' => ['required'],
-        ]);
-        if (Auth::attempt($credentials)) {
-            $user = User::where('user_name', $request->user_name)->first();
-            $token = $user->createToken('token-name')->plainTextToken;
-            return response()->json(['token' => $token], 200);
-        } else {
-            return response()->json(['message' => 'Invalid credentials'], 401);
+        $rules = [
+            'user_name' => 'required|string',
+            'password' => 'required|string'
+        ];
+        $validator = Validator::make($request->input(), $rules);
+        if ($validator->fails()) {
+            return response()->json([
+                'status' => false,
+                'errors' => $validator->errors()->all()
+            ], 400);
         }
+        $user = User::where('user_name', $request->user_name)->first();
+        $rol = User::where('rol', $request->user_name)->first();
+        if (!$user || !Hash::check($request->password, $user->password)) {
+            return response()->json([
+                'status' => false,
+                'message' => 'Invalid login details'
+            ], 401);
+        }
+        return response()->json([
+            'status' => true,
+            'user' => $user,
+            'rol' => $rol,
+            'token' => $user->createToken('token')->plainTextToken
+        ], 200);
     }
     /**
      * Log the user out of the application.
