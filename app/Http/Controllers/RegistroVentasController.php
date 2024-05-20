@@ -6,6 +6,7 @@ use App\Models\RegistroVentas;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
+
 class RegistroVentasController extends Controller
 {
     /**
@@ -106,9 +107,10 @@ class RegistroVentasController extends Controller
      * @param  \App\Models\RegistroVentas  $venta
      * @return \Illuminate\Http\Response
      */
-    public function destroy(RegistroVentas $venta)
+    public function destroy(string $id)
     {
-        $venta->delete();
-        return response()->json(null, 204);
+        $registro = RegistroVentas::findOrFail($id);
+        $registro->delete();
+        return response()->json(['message' => 'User deleted successfully']);
     }
 }

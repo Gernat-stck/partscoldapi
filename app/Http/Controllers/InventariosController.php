@@ -29,9 +29,9 @@ class InventariosController extends Controller
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            '*.product_name' => REQUIRED_STRG,
-            '*.codigo_producto' => REQUIRED_STRG,
-            '*.descripcion' => REQUIRED_STRG,
+            '*.product_name' => 'required|string',
+            '*.codigo_producto' => 'required|string',
+            '*.descripcion' => 'required|string',
             '*.cantidad_stock' => 'required|integer',
             '*.img_product' => 'nullable|string',
             '*.precio_producto' => 'required|numeric',
@@ -73,9 +73,9 @@ class InventariosController extends Controller
     {
         $validator = Validator::make($request->all(), [
             '*.id' => 'required|exists:inventarios,id',
-            '*.product_name' => REQUIRED_STRG,
-            '*.codigo_producto' => REQUIRED_STRG,
-            '*.descripcion' => REQUIRED_STRG,
+            '*.product_name' => 'required|string',
+            '*.codigo_producto' => 'required|string',
+            '*.descripcion' => 'required|string',
             '*.cantidad_stock' => 'required|integer',
             '*.img_product' => 'nullable|string',
             '*.precio_producto' => 'required|numeric',
@@ -99,10 +99,11 @@ class InventariosController extends Controller
      * @param  \App\Models\Inventarios  $inventario
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Inventarios $inventario)
+    public function destroy(string $id)
     {
+        $inventario = Inventarios::findOrFail($id);
         $inventario->delete();
-        return response()->json(null, 204);
+        return response()->json(['message' => 'Eliminado con éxito']);
     }
 }
 
