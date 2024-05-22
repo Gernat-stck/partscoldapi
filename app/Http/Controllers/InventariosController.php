@@ -57,9 +57,20 @@ class InventariosController extends Controller
      * @param  \App\Models\Inventarios  $inventario
      * @return \Illuminate\Http\Response
      */
-    public function show(Inventarios $inventario)
+    public function search(Request $request)
     {
-        return response()->json($inventario);
+        $terminoBusqueda = $request->query('termino');
+        $campos = ['product_name', 'codigo_producto'];
+
+        $query = Inventarios::query();
+
+        foreach ($campos as $campo) {
+            $query->orWhere($campo, 'LIKE', "%{$terminoBusqueda}%");
+        }
+
+        $resultados = $query->get();
+
+        return response()->json($resultados);
     }
 
     /**

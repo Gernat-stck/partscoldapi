@@ -59,9 +59,20 @@ class RegistroVentasController extends Controller
      * @param  \App\Models\RegistroVentas  $venta
      * @return \Illuminate\Http\Response
      */
-    public function show(RegistroVentas $venta)
+    public function search(Request $request)
     {
-        return response()->json($venta);
+        $terminoBusqueda = $request->query('termino');
+        $campos = ['product_name', 'codigo_producto'];
+
+        $query = RegistroVentas::query();
+
+        foreach ($campos as $campo) {
+            $query->orWhere($campo, 'LIKE', "%{$terminoBusqueda}%");
+        }
+
+        $resultados = $query->get();
+
+        return response()->json($resultados);
     }
 
     /**
