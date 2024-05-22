@@ -22,13 +22,13 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/inventario', [InventariosController::class, 'index']);
     Route::put('/inventario/{id}', [InventariosController::class, 'update']);
     Route::post('/inventario/create', [InventariosController::class, 'store']);
-    Route::get('/inventario/search/{field}/{query}', [InventariosController::class, 'search']);
+    Route::get('/inventario/search', [InventariosController::class, 'search']);
     Route::delete('/inventario/{id}', [InventariosController::class, 'destroy']);
 
 
     Route::get('/invoices', [RegistroVentasController::class, 'index']);
     Route::put('/invoices/{id}', [RegistroVentasController::class, 'update']);
     Route::post('/invoices', [RegistroVentasController::class, 'store']);
-    Route::get('/invoices/search/{field}/{query}', [RegistroVentasController::class, 'search']);
+    Route::get('/invoices/search', [RegistroVentasController::class, 'search']);
     Route::delete('/invoices/{id}', [RegistroVentasController::class, 'destroy']);
 });
