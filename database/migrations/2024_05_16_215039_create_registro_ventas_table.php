@@ -20,6 +20,8 @@ return new class extends Migration {
             $table->decimal('total', 8, 2);
             $table->decimal('iva', 8, 2);
             $table->decimal('subtotal', 8, 2);
+            $table->string('giro')->nullable();
+            $table->string('registro_num')->nullable();
             $table->timestamps();
         });
     }

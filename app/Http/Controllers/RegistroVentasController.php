@@ -37,6 +37,8 @@ class RegistroVentasController extends Controller
             '*.total' => REQUIRED_NUMERIC,
             '*.iva' => REQUIRED_NUMERIC,
             '*.subtotal' => REQUIRED_NUMERIC,
+            '*.giro' => REQUIRED_STRG,
+            "*.registro_num" => REQUIRED_STRG
         ]);
 
         if ($validator->fails()) {
@@ -94,6 +96,8 @@ class RegistroVentasController extends Controller
             '*.total' => REQUIRED_NUMERIC,
             '*.iva' => REQUIRED_NUMERIC,
             '*.subtotal' => REQUIRED_NUMERIC,
+            '*.giro' => REQUIRED_STRG,
+            '*.registr_num' => REQUIRED_STRG
         ]);
 
         if ($validator->fails()) {
