@@ -60,7 +60,7 @@ class InventariosController extends Controller
     public function search(Request $request)
     {
         $terminoBusqueda = $request->query('termino');
-        $campos = ['product_name', 'codigo_producto'];
+        $campos = ['product_name', 'codigo_producto', 'descripcion'];
 
         $query = Inventarios::query();
 
