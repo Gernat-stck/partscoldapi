@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\UsersController;
 use App\Http\Controllers\InventariosController;
+use App\Http\Controllers\PdfController;
 use App\Http\Controllers\RegistroVentasController;
 
 
@@ -31,4 +32,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/invoices', [RegistroVentasController::class, 'store']);
     Route::get('/invoices/search', [RegistroVentasController::class, 'search']);
     Route::delete('/invoices/{id}', [RegistroVentasController::class, 'destroy']);
+
+    Route::post('/generate-invoice', [PdfController::class, 'generateInvoice']);
+
 });
