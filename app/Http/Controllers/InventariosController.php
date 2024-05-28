@@ -29,12 +29,12 @@ class InventariosController extends Controller
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'product_name' => 'required|string',
-            'codigo_producto' => 'required|string',
-            'descripcion' => 'required|string',
-            'cantidad_stock' => 'required|integer',
-            'img_product' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048', // Validación para la imagen
-            'precio_producto' => 'required|numeric',
+            '*.product_name' => 'required|string',
+            '*.codigo_producto' => 'required|string',
+            '*.descripcion' => 'required|string',
+            '*.cantidad_stock' => 'required|integer',
+            '*.img_product' => 'nullable|string|image|mimes:jpeg,png,jpg,gif|max:2048', // Validación para la imagen
+            '*.precio_producto' => 'required|numeric',
         ]);
 
         if ($validator->fails()) {
