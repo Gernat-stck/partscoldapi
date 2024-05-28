@@ -29,27 +29,33 @@ class InventariosController extends Controller
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            '*.product_name' => 'required|string',
-            '*.codigo_producto' => 'required|string',
-            '*.descripcion' => 'required|string',
-            '*.cantidad_stock' => 'required|integer',
-            '*.img_product' => 'nullable|string',
-            '*.precio_producto' => 'required|numeric',
+            'product_name' => 'required|string',
+            'codigo_producto' => 'required|string',
+            'descripcion' => 'required|string',
+            'cantidad_stock' => 'required|integer',
+            'img_product' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048', // Validación para la imagen
+            'precio_producto' => 'required|numeric',
         ]);
 
         if ($validator->fails()) {
             return response()->json(['error' => $validator->errors()], 400);
         }
 
-        $createdInventories = [];
+        $inventario_data = $request->all();
 
-        foreach ($request->all() as $InventarioData) {
-            $inventario = Inventarios::create($InventarioData);
-            $createdInventories[] = $inventario;
+        // Procesar la imagen si se cargó
+        if ($request->hasFile('img_product')) {
+            $image = $request->file('img_product');
+            $image_name = time() . '_' . $image->getClientOriginalName();
+            $image->storeAs('public/images', $image_name);
+            $inventario_data['img_product'] = '/storage/images/' . $image_name;
         }
 
-        return response()->json($createdInventories, 201);
+        $inventario = Inventarios::create($inventario_data);
+
+        return response()->json($inventario, 201);
     }
+
 
     /**
      * Display the specified resource.
