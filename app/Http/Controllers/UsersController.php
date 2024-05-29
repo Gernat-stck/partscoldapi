@@ -31,28 +31,24 @@ class UsersController extends Controller
     {
         // Define las reglas de validación
         $validator = Validator::make($request->all(), [
-            '*.name' => 'required|string|max:255',
-            '*.user_name' => 'required|string|max:255|unique:users,user_name',
-            '*.password' => 'required|string|min:8',
-            '*.rol' => 'required|string',
+            'name' => 'required|string|max:255',
+            'user_name' => 'required|string|max:255|unique:users,user_name',
+            'password' => 'required|string|min:8',
+            'rol' => 'required|string',
         ]);
-
         // Verifica si la validación falla
         if ($validator->fails()) {
             return response()->json(['error' => $validator->errors()], 400);
         }
 
-        $createdUsers = [];
+        // Hashea la contraseña antes de crear el usuario
+        $userData = $request->all();
+        $userData['password'] = Hash::make($userData['password']);
 
-        // Itera sobre cada conjunto de datos del usuario
-        foreach ($request->all() as $userData) {
-            // Hashea la contraseña antes de crear el usuario
-            $userData['password'] = Hash::make($userData['password']);
-            $user = User::create($userData);
-            $createdUsers[] = $user;
-        }
+        // Crea el usuario y lo añade al array de usuarios creados
+        $user = User::create($userData);
 
-        return response()->json($createdUsers, 201);
+        return response()->json($user, 201);
     }
 
     public function update(Request $request, string $id)

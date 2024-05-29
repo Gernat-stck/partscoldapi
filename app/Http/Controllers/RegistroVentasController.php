@@ -29,16 +29,16 @@ class RegistroVentasController extends Controller
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            '*.nombre_cliente' => REQUIRED_STRG,
-            '*.direccion' => REQUIRED_STRG,
-            '*.numero_telefono' => REQUIRED_STRG,
+            '*.nombre_cliente' => required|string,
+            '*.direccion' => required|string,
+            '*.numero_telefono' => required|string,
             '*.email' => 'required|string|email',
-            '*.documento' => REQUIRED_STRG,
+            '*.documento' => required|string,
             '*.total' => REQUIRED_NUMERIC,
             '*.iva' => REQUIRED_NUMERIC,
             '*.subtotal' => REQUIRED_NUMERIC,
-            '*.giro' => REQUIRED_STRG,
-            "*.registro_num" => REQUIRED_STRG
+            '*.giro' => required|string,
+            "*.registro_num" => required|string
         ]);
 
         if ($validator->fails()) {
@@ -88,16 +88,16 @@ class RegistroVentasController extends Controller
     {
         $validator = Validator::make($request->all(), [
             '*.id' => 'required|exists:registro_ventas,id',
-            '*.nombre_cliente' => REQUIRED_STRG,
-            '*.direccion' => REQUIRED_STRG,
-            '*.numero_telefono' => REQUIRED_STRG,
+            '*.nombre_cliente' => required|string,
+            '*.direccion' => required|string,
+            '*.numero_telefono' => required|string,
             '*.email' => 'required|string|email',
-            '*.documento' => REQUIRED_STRG,
+            '*.documento' => required|string,
             '*.total' => REQUIRED_NUMERIC,
             '*.iva' => REQUIRED_NUMERIC,
             '*.subtotal' => REQUIRED_NUMERIC,
-            '*.giro' => REQUIRED_STRG,
-            '*.registr_num' => REQUIRED_STRG
+            '*.giro' => required|string,
+            '*.registr_num' => required|string
         ]);
 
         if ($validator->fails()) {

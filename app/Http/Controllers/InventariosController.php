@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Inventarios;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
-
+use Illuminate\Support\Facades\Storage;
 
 class InventariosController extends Controller
 {
@@ -29,12 +29,12 @@ class InventariosController extends Controller
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            '*.product_name' => 'required|string',
-            '*.codigo_producto' => 'required|string',
-            '*.descripcion' => 'required|string',
-            '*.cantidad_stock' => 'required|integer',
-            '*.img_product' => 'nullable|string|image|mimes:jpeg,png,jpg,gif|max:2048', // Validación para la imagen
-            '*.precio_producto' => 'required|numeric',
+            'product_name' => 'required|string',
+            'codigo_producto' => 'required|string',
+            'descripcion' => 'required|string',
+            'cantidad_stock' => 'required|integer',
+            'img_product' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'precio_producto' => 'required|numeric',
         ]);
 
         if ($validator->fails()) {
@@ -86,28 +86,29 @@ class InventariosController extends Controller
      * @param  \App\Models\Inventarios  $inventario
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request)
+    public function update(Request $request, $id)
     {
-        $validator = Validator::make($request->all(), [
-            '*.id' => 'required|exists:inventarios,id',
-            '*.product_name' => 'required|string',
-            '*.codigo_producto' => 'required|string',
-            '*.descripcion' => 'required|string',
-            '*.cantidad_stock' => 'required|integer',
-            '*.img_product' => 'nullable|string',
-            '*.precio_producto' => 'required|numeric',
+        $inventario = Inventarios::findOrFail($id);
+
+        $validatedData = $request->validate([
+            'product_name' => 'required|string',
+            'codigo_producto' => 'required|string',
+            'descripcion' => 'required|string',
+            'cantidad_stock' => 'required|integer',
+            'img_product' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'precio_producto' => 'required|numeric',
         ]);
+        if ($request->hasFile('img_product')) {
+            // Delete the existing image from storage
+            Storage::delete($inventario->img_product);
 
-        if ($validator->fails()) {
-            return response()->json(['error' => $validator->errors()], 400);
+            // Store the new image in storage
+            $validatedData['img_product'] = $request->file('img_product')->store('images');
         }
 
-        foreach ($request->all() as $InventarioData) {
-            $inventario = Inventarios::findOrFail($InventarioData['id']);
-            $inventario->update($InventarioData);
-        }
+        $inventario->update($validatedData);
 
-        return response()->json(['message' => 'Inventories updated successfully'], 200);
+        return response()->json($inventario, 200);
     }
 
     /**
