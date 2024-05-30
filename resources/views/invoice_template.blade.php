@@ -18,6 +18,26 @@
     <p>Giro: {{ $data['giro'] }}</p>
     <p>Documento: {{ $data['documento'] }}</p>
     <p>Email: {{ $data['email'] }}</p>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Producto</th>
+                <th>Cantidad</th>
+                <th>Precio</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach ($data['cart'] as $item)
+                <tr>
+                    <td>{{ $item['product_name'] }}</td>
+                    <td>{{ $item['quantity'] }}</td>
+                    <td>{{ $item['precio_producto'] }}</td>
+                </tr>
+            @endforeach
+        </tbody>
+    </table>
+    <p>Total: {{ $data['total'] }}</p>
 </body>
 
 </html>
