@@ -12,6 +12,7 @@ use App\Http\Controllers\RegistroVentasController;
 // Ruta para iniciar sesión
 Route::middleware('auth.session')->post('/login', [LoginController::class, 'authenticate']);
 Route::middleware('auth:sanctum')->post('/logout', [LoginController::class, 'logout']);
+Route::get('/verify', [LoginController::class, 'verify'])->middleware('auth:sanctum');
 
 //Rutas de la api
 Route::middleware('auth:sanctum')->group(function () {
