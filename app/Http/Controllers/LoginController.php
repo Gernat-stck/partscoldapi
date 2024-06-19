@@ -51,4 +51,9 @@ class LoginController extends Controller
 
         return response()->json(['message' => 'Logged out successfully'], 200);
     }
+
+    public function verify(Request $request)
+{
+    return response()->json(['message' => 'Token is valid', 'user' => $request->user()], 200);
+}
 }
