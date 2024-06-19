@@ -6,6 +6,8 @@ use App\Models\Inventarios;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Log;
+
 
 class InventariosController extends Controller
 {
@@ -28,6 +30,8 @@ class InventariosController extends Controller
      */
     public function store(Request $request)
     {
+        Log::info('Datos recibidos en la solicitud de creación:', $request->all());
+
         $validator = Validator::make($request->all(), [
             'product_name' => 'required|string',
             'codigo_producto' => 'required|string',
@@ -53,7 +57,7 @@ class InventariosController extends Controller
 
         $inventario = Inventarios::create($inventario_data);
 
-        return response()->json($inventario, 201);
+        return response()->json($inventario , 201);
     }
 
 
@@ -88,29 +92,33 @@ class InventariosController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $inventario = Inventarios::findOrFail($id);
-
-        $validatedData = $request->validate([
+        $inventario_data = Inventarios::findOrFail($id);
+        $validator = Validator::make($request->all(), [
             'product_name' => 'required|string',
-            'codigo_producto' => 'required|string',
-            'descripcion' => 'required|string',
-            'cantidad_stock' => 'required|integer',
-            'img_product' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
-            'precio_producto' => 'required|numeric',
+            'codigo_producto' => 'sometimes|string',
+            'descripcion' => 'sometimes|string',
+            'cantidad_stock' => 'sometimes|integer',
+            'precio_producto' => 'sometimes|numeric',
+            'img_product' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
-        if ($request->hasFile('img_product')) {
-            // Delete the existing image from storage
-            Storage::delete($inventario->img_product);
-
-            // Store the new image in storage
-            $validatedData['img_product'] = $request->file('img_product')->store('images');
+        if ($validator->fails()) {
+            return response()->json(['error' => $validator->errors()], 400);
         }
+        $validatedData = $validator->validated();
+        if ($request->hasFile('img_product')) {
+            if ($inventario_data->img_product) {
+                Storage::delete('public/images/' . basename($inventario_data->img_product));
+            }
+            $image = $request->file('img_product');
+            $image_name = time() . '_' . $image->getClientOriginalName();
+            $path = $image->storeAs('public/images', $image_name);
+            $validatedData['img_product'] = '/storage/images/' . $image_name;
+        }
+        $inventario_data->update($validatedData);
 
-        $inventario->update($validatedData);
+        return response()->json(['success' => true], 200);
 
-        return response()->json($inventario, 200);
     }
-
     /**
      * Remove the specified resource from storage.
      *
