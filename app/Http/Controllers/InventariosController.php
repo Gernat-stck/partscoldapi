@@ -37,7 +37,7 @@ class InventariosController extends Controller
             'codigo_producto' => 'required|string',
             'descripcion' => 'required|string',
             'cantidad_stock' => 'required|integer',
-            'img_product' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'img_product' => 'nullable|image|mimes:jpeg,png,jpg,gif',
             'precio_producto' => 'required|numeric',
         ]);
 
