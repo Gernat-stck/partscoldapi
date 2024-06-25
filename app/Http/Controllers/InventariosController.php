@@ -99,7 +99,7 @@ class InventariosController extends Controller
             'descripcion' => 'sometimes|string',
             'cantidad_stock' => 'sometimes|integer',
             'precio_producto' => 'sometimes|numeric',
-            'img_product' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'img_product' => 'nullable|image|mimes:jpeg,png,jpg,gif',
         ]);
         if ($validator->fails()) {
             return response()->json(['error' => $validator->errors()], 400);
