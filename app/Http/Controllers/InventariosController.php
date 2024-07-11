@@ -57,7 +57,7 @@ class InventariosController extends Controller
 
         $inventario = Inventarios::create($inventario_data);
 
-        return response()->json($inventario , 201);
+        return response()->json($inventario, 201);
     }
 
 
@@ -70,18 +70,26 @@ class InventariosController extends Controller
     public function search(Request $request)
     {
         $terminoBusqueda = $request->query('termino');
-        $campos = ['product_name', 'codigo_producto', 'descripcion'];
+        $campoPrioridad = $request->query('campo'); // Obtén el campo de prioridad desde la solicitud
 
-        $query = Inventarios::query();
+        $campos = ['product_name', 'codigo_producto', 'descripcion', 'id'];
 
-        foreach ($campos as $campo) {
-            $query->orWhere($campo, 'LIKE', "%{$terminoBusqueda}%");
+        // Verifica si el campo de prioridad es válido
+        if (in_array($campoPrioridad, $campos)) {
+            $query = Inventarios::where($campoPrioridad, 'LIKE', "%{$terminoBusqueda}%");
+        } else {
+            // Si el campo no es válido, busca en todos los campos
+            $query = Inventarios::query();
+            foreach ($campos as $campo) {
+                $query->orWhere($campo, 'LIKE', "%{$terminoBusqueda}%");
+            }
         }
 
         $resultados = $query->get();
 
         return response()->json($resultados);
     }
+
 
     /**
      * Update the specified resource in storage.
