@@ -133,7 +133,6 @@ class InventariosController extends Controller
         $inventario_data = Inventarios::findOrFail($id);
         $validator = Validator::make($request->all(), [
             'cantidad_stock' => 'sometimes|integer',
-            'precio_producto' => 'sometimes|numeric',
         ]);
         if ($validator->fails()) {
             return response()->json(['error' => $validator->errors()], 400);
