@@ -23,6 +23,7 @@ Route::middleware('auth:sanctum')->group(function () {
 
     Route::get('/inventario', [InventariosController::class, 'index']);
     Route::put('/inventario/{id}', [InventariosController::class, 'update']);
+    Route::put('/inventario-stock/{id}', [InventariosController::class, 'updateStock']);
     Route::post('/inventario/create', [InventariosController::class, 'store']);
     Route::get('/inventario/search', [InventariosController::class, 'search']);
     Route::delete('/inventario/{id}', [InventariosController::class, 'destroy']);
