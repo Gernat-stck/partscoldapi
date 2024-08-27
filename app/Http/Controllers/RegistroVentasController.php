@@ -28,31 +28,29 @@ class RegistroVentasController extends Controller
      */
     public function store(Request $request)
     {
-        $validator = Validator::make($request->all(), [
-            '*.nombre_cliente' => required|string,
-            '*.direccion' => required|string,
-            '*.numero_telefono' => required|string,
-            '*.email' => 'required|string|email',
-            '*.documento' => required|string,
-            '*.total' => REQUIRED_NUMERIC,
-            '*.iva' => REQUIRED_NUMERIC,
-            '*.subtotal' => REQUIRED_NUMERIC,
-            '*.giro' => required|string,
-            "*.registro_num" => required|string
+        $validatedData = $request->validate([
+            'nombre_cliente' => 'required|string|max:255',
+            'direccion' => 'required|string|max:255',
+            'numero_telefono' => 'required|string|max:15',
+            'email' => 'required|email|max:255',
+            'documento' => 'required|string|max:20',
+            'total' => 'required|numeric',
+            'iva' => 'required|numeric',
+            'subtotal' => 'nullable|numeric',
+            'giro' => 'required|string|max:255',
+            'registro_num' => 'required|string|max:20',
+            'factura' => 'required|file|mimes:pdf|max:2048',
         ]);
 
-        if ($validator->fails()) {
-            return response()->json(['error' => $validator->errors()], 400);
+        // Guardar el archivo PDF
+        if ($request->hasFile('factura')) {
+            $path = $request->file('factura')->store('facturas', 'public');
+            $validatedData['documento_path'] = $path;
         }
 
-        $createdRegistro = [];
+        $invoice = RegistroVentas::create($validatedData);
 
-        foreach ($request->all() as $value) {
-            $venta = RegistroVentas::create($value);
-            $createdRegistro[] = $venta;
-        }
-
-        return response()->json($createdRegistro, 201);
+        return response()->json(['success' => true, 'invoice' => $invoice], 201);
     }
 
     /**
@@ -76,45 +74,6 @@ class RegistroVentasController extends Controller
 
         return response()->json($resultados);
     }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\RegistroVentas  $venta
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request)
-    {
-        $validator = Validator::make($request->all(), [
-            '*.id' => 'required|exists:registro_ventas,id',
-            '*.nombre_cliente' => required|string,
-            '*.direccion' => required|string,
-            '*.numero_telefono' => required|string,
-            '*.email' => 'required|string|email',
-            '*.documento' => required|string,
-            '*.total' => REQUIRED_NUMERIC,
-            '*.iva' => REQUIRED_NUMERIC,
-            '*.subtotal' => REQUIRED_NUMERIC,
-            '*.giro' => required|string,
-            '*.registr_num' => required|string
-        ]);
-
-        if ($validator->fails()) {
-            return response()->json(['error' => $validator->errors()], 400);
-        }
-
-        $updatedVentas = [];
-
-        foreach ($request->all() as $value) {
-            $currentVenta = RegistroVentas::findOrFail($value['id']);
-            $currentVenta->update($value);
-            $updatedVentas[] = $currentVenta;
-        }
-
-        return response()->json($updatedVentas, 200);
-    }
-
 
     /**
      * Remove the specified resource from storage.
