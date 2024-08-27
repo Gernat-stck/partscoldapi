@@ -22,6 +22,7 @@ return new class extends Migration {
             $table->decimal('subtotal', 8, 2);
             $table->string('giro')->nullable();
             $table->string('registro_num')->nullable();
+            $table->string('documento_path')->nullable();
             $table->timestamps();
         });
     }
