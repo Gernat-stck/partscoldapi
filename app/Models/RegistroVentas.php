@@ -19,6 +19,7 @@ class RegistroVentas extends Model
         'iva',
         'subtotal',
         'giro',
-        'registro_num'
+        'registro_num',
+        'documento_path'
     ];
 }
